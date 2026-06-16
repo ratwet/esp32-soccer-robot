@@ -1,7 +1,7 @@
 <h1 align="center">🤖 ESP32 WiFi Soccer Robot</h1>
 
 <p align="center">
-  <em>A competitive 4-wheel differential-drive soccer robot controlled entirely over WiFi via a browser-based gamepad. Built for the CUJ Robotics Competition.</em>[cite: 1]
+  <em>A competitive 4-wheel differential-drive soccer robot controlled entirely over WiFi via a browser-based gamepad. Built for the CUJ Robotics Competition.</em>
 </p>
 
 <p align="center">
@@ -14,7 +14,7 @@
 
 ## 📖 Overview
 
-This is a pusher-style, differential-drive (tank-style) soccer robot engineered specifically for robot soccer competitions.[cite: 1] It is driven wirelessly through a custom web interface that runs natively on any phone or laptop browser—**no app installation required**. 
+This is a pusher-style, differential-drive (tank-style) soccer robot engineered specifically for robot soccer competitions. It is driven wirelessly through a custom web interface that runs natively on any phone or laptop browser—**no app installation required**. 
 
 The web controller is designed to mimic a real hardware gamepad, featuring a landscape full-screen mode, split-screen layout, live tuning controls, and true multi-touch support for complex maneuvering.
 
@@ -22,8 +22,8 @@ The web controller is designed to mimic a real hardware gamepad, featuring a lan
 
 ## 🛠️ Hardware & Components
 
-*   **Microcontroller:** ESP32 Dev Module (running at 240 MHz for minimum latency)[cite: 1]
-*   **Motor Driver:** 2× L298N H-Bridge[cite: 1]
+*   **Microcontroller:** ESP32 Dev Module (running at 240 MHz for minimum latency)
+*   **Motor Driver:** 2× L298N H-Bridge
 *   **Motors:** 4× BO Gear Motors (paired per side)
 *   **Wheels:** 4× Standard Robot Wheels
 *   **Power Supply:** 12V Battery → L298N → 5V onboard regulator → ESP32
