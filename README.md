@@ -1,143 +1,490 @@
-<h1 align="center">🤖 ESP32 WiFi Soccer Robot</h1>
+# 🤖 ESP32 WiFi Soccer Robot
 
 <p align="center">
-  <img src="https://img.shields.io/badge/ESP32-E7352C?style=for-the-badge&logo=espressif&logoColor=white" alt="ESP32">
-  <img src="https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white" alt="C++">
-  <img src="https://img.shields.io/badge/Arduino-00979D?style=for-the-badge&logo=arduino&logoColor=white" alt="Arduino">
-  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
-  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript">
+  <img src="https://img.shields.io/badge/ESP32-E7352C?style=for-the-badge&logo=espressif&logoColor=white">
+  <img src="https://img.shields.io/badge/Arduino-00979D?style=for-the-badge&logo=arduino&logoColor=white">
+  <img src="https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white">
+  <img src="https://img.shields.io/badge/WiFi-Controlled-success?style=for-the-badge">
+  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge">
 </p>
 
-> A competitive 4-wheel differential-drive soccer robot controlled over WiFi via a custom browser-based gamepad. Built for the **CUJ Robotics Competition**, this robot requires no app installation—just connect to its WiFi hotspot and open your browser!
+<p align="center">
+  <strong>A high-performance ESP32-powered WiFi Soccer Robot with a browser-based controller, multi-touch support, smooth differential steering, and real-time tuning controls.</strong>
+</p>
 
 ---
 
 ## 📖 Overview
 
-This pusher-style soccer robot is engineered for competition. It features a differential drive system (tank-style) driven wirelessly through a web interface that works on any smartphone or laptop. The controller is optimized for high-performance driving, featuring true multi-touch support, live tuning controls, a split-screen landscape layout, and a responsive gamepad feel.
+This project is a competitive **4-wheel differential-drive soccer robot** built around the ESP32 microcontroller. The robot creates its own WiFi hotspot and hosts a responsive browser-based controller, allowing users to drive it from any smartphone, tablet, or laptop without installing additional applications.
+
+Designed for robotics competitions, the system prioritizes:
+
+* Low-latency control
+* Reliable WiFi communication
+* Smooth steering behavior
+* Mobile-friendly operation
+* Real-time driving adjustments
+
+Simply power on the robot, connect to its WiFi network, open a browser, and start driving.
+
+---
 
 ## ✨ Features
 
-- 🎮 **Browser-Based Gamepad:** No app needed. Accessible via any web browser.
-- 📱 **Mobile Optimized:** Full-screen landscape mode with orientation lock and portrait-mode block.
-- 🤌 **True Multi-Touch:** Press Forward + Left/Right simultaneously for fluid movement.
-- 🏎️ **Smooth Arc Turns:** Inner wheel is slowed (not reversed) for precise cornering.
-- 🔀 **Diagonal Movement:** Supports FL, FR, BL, and BR arc combinations.
-- ⚙️ **Live Tuning:**
-  - **3 Speed Modes:** High (100%), Medium (73%), Low (45%).
-  - **Turn Speed Control:** Adjustable inner wheel speed (4% – 60%).
-  - **Direction Balance Trim:** Fixes motor drift live (-20 to +20).
-- ⚡ **Ultra-Low Latency:** 240MHz CPU with WiFi power-save disabled.
-- 🔒 **Button Lock Prevention:** Reliable pointer tracking via Pointer-ID maps.
+### 🎮 Browser-Based Controller
+
+* No Android app required
+* No iOS app required
+* Works directly from any web browser
+* Full-screen responsive interface
+
+### 📱 Mobile Optimized
+
+* Landscape-first controller layout
+* Full-screen gameplay mode
+* Touch-friendly controls
+* Fast response on mobile devices
+
+### 🤌 True Multi-Touch Support
+
+Supports simultaneous button presses:
+
+* Forward + Left
+* Forward + Right
+* Backward + Left
+* Backward + Right
+
+Allowing realistic diagonal and arc movements.
+
+### 🏎️ Smooth Differential Steering
+
+Instead of reversing one side while turning:
+
+* Outer wheel remains at full speed
+* Inner wheel slows down proportionally
+
+Benefits:
+
+* Better ball control
+* Reduced wheel slip
+* Smoother turning radius
+* More predictable movement
+
+### ⚙️ Real-Time Tuning
+
+Adjust settings directly from the controller:
+
+* Speed modes
+* Steering sensitivity
+* Motor balance compensation
+
+No firmware upload required.
+
+### ⚡ Competition Ready
+
+* ESP32 running at 240MHz
+* WiFi power-saving disabled
+* Optimized command handling
+* Low-latency wireless control
+
+---
+
+## 🏗️ System Architecture
+
+```text
+Smartphone / Laptop
+          │
+          ▼
+Browser-Based Controller
+          │
+          ▼
+      WiFi Network
+          │
+          ▼
+        ESP32
+          │
+          ▼
+   Dual L298N Drivers
+          │
+          ▼
+      4 DC Motors
+          │
+          ▼
+      Robot Drive
+```
 
 ---
 
 ## 🛠️ Hardware Components
 
-- **Microcontroller:** ESP32 Dev Module
-- **Motor Drivers:** 2 × L298N H-Bridge
-- **Motors:** 4 × BO Gear Motors (paired per side)
-- **Wheels:** 4 × Standard Robot Wheels
-- **Power Delivery:** 12V Battery → L298N → 5V onboard regulator → ESP32
+| Component          | Quantity  |
+| ------------------ | --------- |
+| ESP32 Dev Module   | 1         |
+| L298N Motor Driver | 2         |
+| BO Gear Motors     | 4         |
+| Robot Wheels       | 4         |
+| Robot Chassis      | 1         |
+| 12V Battery        | 1         |
+| Jumper Wires       | As Needed |
 
 ---
 
-## 🔌 Circuit & Wiring Guide
+## 🔌 Circuit Connections
 
-### Power Routing
-> ⚠️ **IMPORTANT:** All GND pins (ESP32, L298N #1, L298N #2, Battery) **must** be connected together. Make sure the 12V–5V jumper is **ON** on both L298N boards.
+### ESP32 → Motor Drivers
 
-| Component | Terminal / Pin | Connection |
-| :--- | :--- | :--- |
-| **12V Battery** | `(+) Positive` | L298N #1 `VIN` **&** L298N #2 `VIN` |
-| **12V Battery** | `(-) Negative` | L298N #1 `GND`, L298N #2 `GND`, **&** ESP32 `GND` |
-| **L298N #1** | `5V OUT` | ESP32 `5V / VIN` |
+| ESP32 GPIO | L298N Pin | Function          |
+| ---------- | --------- | ----------------- |
+| GPIO 14    | ENA       | Left Motor PWM    |
+| GPIO 26    | IN1       | Left Direction A  |
+| GPIO 27    | IN2       | Left Direction B  |
+| GPIO 32    | ENB       | Right Motor PWM   |
+| GPIO 25    | IN3       | Right Direction A |
+| GPIO 33    | IN4       | Right Direction B |
 
-### Signal Wiring (ESP32 to L298N)
+---
 
-| ESP32 GPIO | L298N Pin | Module | Function |
-| :--- | :--- | :--- | :--- |
-| `GPIO 14` | `ENA` | L298N #1 | Left Motors PWM (Speed) |
-| `GPIO 26` | `IN1` | L298N #1 | Left Motors Direction A |
-| `GPIO 27` | `IN2` | L298N #1 | Left Motors Direction B |
-| `GPIO 32` | `ENB` | L298N #2 | Right Motors PWM (Speed) |
-| `GPIO 25` | `IN3` | L298N #2 | Right Motors Direction A |
-| `GPIO 33` | `IN4` | L298N #2 | Right Motors Direction B |
+### Power Connections
 
-### Motor Wiring (Parallel Configuration)
-Wire the front and rear motors on each side together in parallel.
-- **L298N `OUT1` / `OUT3`:** Front Motor (+) and Rear Motor (+)
-- **L298N `OUT2` / `OUT4`:** Front Motor (-) and Rear Motor (-)
-*(If motors spin in the wrong direction, simply swap the two wires on that motor at the L298N output terminals—no code change needed).*
+| Source          | Destination   |
+| --------------- | ------------- |
+| Battery (+)     | L298N #1 VIN  |
+| Battery (+)     | L298N #2 VIN  |
+| Battery (-)     | Common Ground |
+| L298N 5V Output | ESP32 VIN     |
+
+> ⚠️ Important: All grounds (ESP32, battery, and motor drivers) must be connected together.
+
+---
+
+## ⚙️ Motor Configuration
+
+The robot uses a differential drive configuration.
+
+### Left Side
+
+* Front Left Motor
+* Rear Left Motor
+
+Connected in parallel.
+
+### Right Side
+
+* Front Right Motor
+* Rear Right Motor
+
+Connected in parallel.
+
+If any motor rotates in the wrong direction, swap its two motor wires.
 
 ---
 
 ## 🕹️ Movement Commands
 
-| Command | Action | Behavior |
-| :---: | :--- | :--- |
-| **F** | Forward | Both motors forward, full speed |
-| **B** | Backward | Both motors backward, full speed |
-| **L** | Left Turn | Both motors forward, left inner slowed (smooth arc) |
-| **R** | Right Turn | Both motors forward, right inner slowed (smooth arc) |
-| **FL / FR** | Diagonal Forward | Arc forward-left / forward-right |
-| **BL / BR** | Diagonal Backward | Arc backward-left / backward-right |
-| **S** | Stop | Full stop |
+| Command | Action         |
+| ------- | -------------- |
+| F       | Forward        |
+| B       | Backward       |
+| L       | Left Arc       |
+| R       | Right Arc      |
+| FL      | Forward Left   |
+| FR      | Forward Right  |
+| BL      | Backward Left  |
+| BR      | Backward Right |
+| S       | Stop           |
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Installation
 
-### 1. Arduino IDE Setup
-1. Open Arduino IDE → `File` → `Preferences`.
-2. Paste the following into **Additional Boards Manager URLs**:
-   `https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json`
-3. Go to `Tools` → `Board` → `Boards Manager`.
-4. Search for **esp32** and install the package by *Espressif Systems*.
-5. Select `Tools` → `Board` → `ESP32 Arduino` → **ESP32 Dev Module**.
+### 1. Install Arduino IDE
 
-### 2. Upload the Code
-1. Clone this repository or copy `robot.ino` into the Arduino IDE.
-2. Connect your ESP32 via USB.
-3. Select your COM port under `Tools` → `Port`.
-4. Click **Upload**.
-5. Open the Serial Monitor at `115200` baud to confirm a successful boot.
+Download:
 
-### 3. Connect & Drive
-1. Power on the robot.
-2. Connect your smartphone or laptop to the robot's WiFi network:
-   - **SSID:** `CUJ`
-   - **Password:** `142482830`
-3. Open your web browser and navigate to: `http://192.168.4.1`
-4. Tap **TAP TO START** to enter fullscreen mode.
-5. Start driving!
+https://www.arduino.cc/en/software
 
 ---
 
-## ⚙️ Live Tuning & Customization
+### 2. Install ESP32 Board Package
 
-### Tuning via the Web Controller
-*   **TURN Knob (Turn Speed):** Controls how much the inner wheel slows during turns. 
-    *   *4–15%: Very tight sharp turn*
-    *   *16–30%: Balanced smooth arc (Recommended)*
-    *   *40–60%: Very wide gradual arc*
-*   **BAL Knob (Direction Balance):** Corrects sideways drift during straight movement.
-    *   *Negative value (-): Fixes leftward drift.*
-    *   *Positive value (+): Fixes rightward drift.*
-    *   *(Start at 0, press `-` or `+` one step at a time and test until straight).*
+Open:
 
-### Customizing the Code
-You can easily change your credentials and pin mappings at the top of the `robot.ino` sketch:
+File → Preferences
+
+Add the following URL:
+
+```text
+https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+```
+
+Open:
+
+```text
+Tools → Board Manager
+```
+
+Search:
+
+```text
+ESP32
+```
+
+Install:
+
+```text
+Espressif Systems ESP32 Package
+```
+
+---
+
+### 3. Clone Repository
+
+```bash
+git clone https://github.com/yourusername/esp32-wifi-soccer-robot.git
+```
+
+---
+
+### 4. Open Project
+
+Open:
+
+```text
+code.ino
+```
+
+in Arduino IDE.
+
+---
+
+### 5. Select Board
+
+```text
+Tools → Board → ESP32 Dev Module
+```
+
+---
+
+### 6. Upload Firmware
+
+1. Connect ESP32 via USB
+2. Select correct COM Port
+3. Click Upload
+
+---
+
+## 📡 Connecting to the Robot
+
+After powering the robot:
+
+### WiFi Credentials
+
+```text
+SSID: CUJ
+Password: 142482830
+```
+
+Connect your device to the WiFi network.
+
+Open:
+
+```text
+http://192.168.4.1
+```
+
+Press:
+
+```text
+TAP TO START
+```
+
+and begin driving.
+
+---
+
+## ⚙️ Live Tuning Controls
+
+### Speed Modes
+
+| Mode   | Output |
+| ------ | ------ |
+| High   | 100%   |
+| Medium | 73%    |
+| Low    | 45%    |
+
+---
+
+### Turn Control
+
+Adjusts how much the inner wheel slows during turns.
+
+| Value  | Behavior          |
+| ------ | ----------------- |
+| 4–15%  | Very Sharp Turn   |
+| 16–30% | Balanced Steering |
+| 40–60% | Wide Arc Turn     |
+
+Recommended:
+
+```text
+16% – 30%
+```
+
+---
+
+### Balance Adjustment
+
+Used to correct drift.
+
+| Value    | Effect              |
+| -------- | ------------------- |
+| Negative | Correct Left Drift  |
+| Positive | Correct Right Drift |
+
+---
+
+## 🔧 Customization
+
+### Change WiFi Credentials
 
 ```cpp
-// 1. Change WiFi Credentials (Password must be 8+ chars)
-const char* ssid     = "CUJ";
-const char* password = "142482830";
+const char* ssid = "YourSSID";
+const char* password = "YourPassword";
+```
 
-// 2. Change Motor GPIO Pins
-#define ENA 14    // Left motor PWM
-#define IN1 26    // Left motor direction A
-#define IN2 27    // Left motor direction B
-#define ENB 32    // Right motor PWM
-#define IN3 25    // Right motor direction A
-#define IN4 33    // Right motor direction B
+---
+
+### Change Motor Pins
+
+```cpp
+#define ENA 14
+#define IN1 26
+#define IN2 27
+
+#define ENB 32
+#define IN3 25
+#define IN4 33
+```
+
+---
+
+## 📂 Repository Structure
+
+```text
+ESP32-WiFi-Soccer-Robot/
+│
+├── code.ino
+├── README.md
+└── LICENSE
+
+```
+
+---
+
+## 📈 Performance Features
+
+This project includes several optimizations:
+
+* ESP32 CPU at 240MHz
+* WiFi sleep disabled
+* Efficient motor command processing
+* Responsive browser interface
+* Multi-touch pointer tracking
+* Smooth differential steering
+
+These improvements reduce input lag and improve handling during matches.
+
+---
+
+## 🔍 Troubleshooting
+
+### Cannot Connect to WiFi
+
+* Verify robot is powered
+* Restart ESP32
+* Check SSID and password
+* Confirm antenna is unobstructed
+
+---
+
+### Web Controller Not Opening
+
+Verify:
+
+```text
+http://192.168.4.1
+```
+
+and ensure you are connected to the robot's WiFi network.
+
+---
+
+### Motors Spin Backwards
+
+Swap motor polarity on the corresponding motor.
+
+No code changes required.
+
+---
+
+### Robot Pulls to One Side
+
+Use the Balance Adjustment control until the robot drives straight.
+
+---
+
+## 🛡️ Safety Notes
+
+* Disconnect power before modifying wiring.
+* Avoid short circuits.
+* Use appropriate battery protection.
+* Verify polarity before powering on.
+* Keep hands clear of moving wheels.
+
+---
+
+## 🚀 Future Improvements
+
+Potential upgrades:
+
+* ESP32-CAM integration
+* FPV video streaming
+* Autonomous ball tracking
+* Line detection
+* OLED status display
+* PID motor control
+* OTA firmware updates
+* Wireless gamepad support
+* Telemetry dashboard
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome.
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Submit a pull request
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License.
+
+See the `LICENSE` file for more information.
+
+---
+
+## ⭐ Support
+
+If you found this project useful:
+
+* ⭐ Star the repository
+* 🍴 Fork the project
+* 📢 Share it with the robotics community
+
+Happy Building! 🤖⚽
