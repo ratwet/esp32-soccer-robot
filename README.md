@@ -1,186 +1,85 @@
-ESP32 WiFi Soccer Robot
+<h1 align="center">🤖 ESP32 WiFi Soccer Robot</h1>
 
-A competitive 4-wheel soccer robot controlled over WiFi via a browser-based game pad built with ESP32, dual L298N motor drivers, and BO gear motors. No app install required just connect to WiFi and open a browser.
-Built for the CUJ Robotics Competition by our team.
+<p align="center">
+  <em>A competitive 4-wheel differential-drive soccer robot controlled entirely over WiFi via a browser-based gamepad. Built for the CUJ Robotics Competition.</em>[cite: 1]
+</p>
 
-
-Overview
-
-This robot is a differential drive pusher-style soccer robot designed for robot soccer competitions. It is driven wireless through a custom game pad web interface that works on any phone or laptop browser. The controller is designed to feel like a real game pad, landscape full screen mode, split-screen layout, live tuning controls, and true multi-touch support.
-
-Hardware
-
-Component Details :-
-    • Micro-controller - ESP32 Dev Module 
-    • Motor Driver - 2× L298N H-Bridge 
-    • Motors - 4× BO Gear Motors (paired per side)
-    • Wheels - 4× Standard Robot Wheels
-    • Power - 12V Battery → L298N → 5V onboard reg → ESP32 
-    • Drive Type - Differential drive (tank style) 
-
-Circuit Wiring
-
-
-12V Battery (+)                             L298N #1 VIN
-                                            L298N #2 VIN
-
-12V Battery (-)                               L298N #1 GND
-                                              L298N #2 GND
-                                              ESP32 GND
-
-L298N #1 5V OUT                       ESP32 5V/VIN
-Make sure the 12V–5V jumper is ON on both L298N boards.
-
-L298N #1                                     Left Motors (both wired in parallel)
-L298N Pin                                    ESP32 GPIO
-
-ENA                                          GPIO 14 (PWM) 
-IN1                                          GPIO 26 
-IN2                                          GPIO 27 
-OUT1 & OUT2                                  Left Front + Rear Motors (parallel) 
-
-
-
-
-L298N #2                                      Right Motors (both wired in parallel)
-L298N Pin                                     ESP32 GPIO 
-
- ENB                                          GPIO 32 (PWM) 
- IN3                                          GPIO 25 
- IN4                                          GPIO 33 
- OUT1 & OUT2                                  Right Front + Rear Motors (parallel) 
-
-4-Motor Parallel Wiring
-L298N OUT1                                    Front Motor (+) and Rear Motor (+)
-L298N OUT2                                    Front Motor (−) and Rear Motor (−)
-⚠️ All GND pins (ESP32, L298N #1, L298N #2, Battery) must be connected together.
-
-Software
-
-Features :-
-    • Browser-based WiFi game pad, no app needed
-    • Full screen landscape mode with orientation lock
-    • True multi-touch press Forward + Left/Right simultaneously
-    • Smooth arc turns inner wheel slowed, not reversed
-    • Diagonal movement:- FL, FR, BL, BR arc combos
-    • 3 speed modes, High / Medium / Low
-    • Live Turn Speed adjustment (4 – 60%, steps of 2)
-    • Live Direction Balance trim (−20 to +20, steps of 2), fixes motor drift
-    • Button lock prevention pointer tracking via pointer-id Map
-    • Portrait mode block with rotate reminder
-    • 240MHz CPU + WiFi power save disabled for minimum latency
-      
-Movement Commands :-
-Command                                  Behavior
-
-F                                        Both motors forward, full speed 
-B                                        Both motors backward, full speed
-L                                        Both motors forward, left inner slowed (smooth arc left) 
-R                                        Both motors forward, right inner slowed (smooth arc right) 
-FL                                       Arc forward-left (diagonal) 
-FR                                       Arc forward-right (diagonal) 
-BL                                       Arc backward-left (diagonal) 
-BR                                       Arc backward-right (diagonal) 
-S                                        Full stop  
-
-
-
-
-
-Getting Started
-
-1. Install Arduino IDE Setup 
-2. Add ESP32 Board Support
-	1. Open Arduino IDE --> File --> Preferences
-	2. Paste in Additional Boards Manager URLs:
-	https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
-3. Go to Tools --> Board --> Boards Manager
-4. Search esp32 --> Install esp32 by Espressif Systems
-5. Select Tools --> Board -- > ESP32 Arduino --> ESP32 Dev Module
-
-Upload the Code
-1. Clone this repo or copy robot.ino into Arduino IDE
-2. Connect ESP32 via USB
-3. Select your port under Tools --> Port 
-4. Click Upload
-5. Open Serial Monitor at 115200 baud to confirm boot
-
-Connect & Drive
-
-1. Power on the robot
-2. Connect your phone or laptop to WiFi: CUJ / password: 142482830 (You can change it)
-3. Open browser → http://192.168.4.1
-4. Tap TAP TO START to enter fullscreen landscape mode
-5. Drive!
+<p align="center">
+  <img src="https://img.shields.io/badge/Hardware-ESP32-E7352C?style=for-the-badge&logo=espressif&logoColor=white" alt="ESP32">
+  <img src="https://img.shields.io/badge/Language-C++-%2300599C?style=for-the-badge&logo=c%2B%2B&logoColor=white" alt="C++">
+  <img src="https://img.shields.io/badge/Frontend-HTML/CSS/JS-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML/CSS/JS">
+</p>
 
 ---
 
-Live Tuning (from the controller)
+## 📖 Overview
 
-Speed :-
-    • High  255 (100%) 
-    • Medium  185 (73%)
-    • Low  115 (45%) 
+This is a pusher-style, differential-drive (tank-style) soccer robot engineered specifically for robot soccer competitions.[cite: 1] It is driven wirelessly through a custom web interface that runs natively on any phone or laptop browser—**no app installation required**. 
 
-Turn Speed (TURN knob)
-Controls how much the inner wheel slows during a left or right turn.
-	Low % (4–15%) = very tight sharp turn
-	Medium % (16–30%) = balanced smooth arc (recommended)
-	High % (40–60%) = very wide gradual arc
+The web controller is designed to mimic a real hardware gamepad, featuring a landscape full-screen mode, split-screen layout, live tuning controls, and true multi-touch support for complex maneuvering.
 
-Direction Balance (BAL knob)
-Corrects motor speed mismatch that causes the robot to drift sideways during straight movement.
-	Negative value = slows left motors (fixes leftward drift)
-	Positive value = slows right motors (fixes rightward drift)
-	Start at 0, press − one step at a time, drive forward, repeat until straight
+---
 
-Always calibrate balance on the actual competition floor different surfaces change drift behavior.
+## 🛠️ Hardware & Components
 
+*   **Microcontroller:** ESP32 Dev Module (running at 240 MHz for minimum latency)[cite: 1]
+*   **Motor Driver:** 2× L298N H-Bridge[cite: 1]
+*   **Motors:** 4× BO Gear Motors (paired per side)
+*   **Wheels:** 4× Standard Robot Wheels
+*   **Power Supply:** 12V Battery → L298N → 5V onboard regulator → ESP32
 
-Customisation
+### 🔌 Circuit Wiring & Pinout
 
-Change WiFi name and password
-At the very top of the code:
-	const char* ssid     = "CUJ";
-	const char* password = "142482830";
-Password must be at least 8 characters or the hotspot will not start.
+**Power Distribution**
+> ⚠️ **CRITICAL:** All `GND` pins (ESP32, L298N #1, L298N #2, and Battery) MUST be connected together to ensure a common ground. Make sure the 12V–5V jumper is **ON** on both L298N boards.
 
-Change motor GPIO pins
+| Source | Destination |
+| :--- | :--- |
+| **12V Battery (+)** | L298N #1 `VIN` & L298N #2 `VIN` |
+| **12V Battery (-)** | L298N #1 `GND`, L298N #2 `GND`, & ESP32 `GND` |
+| **L298N #1 (5V OUT)** | ESP32 `5V/VIN` |
 
-#define ENA 14    // Left motor PWM
-#define IN1 26    // Left motor direction A
-#define IN2 27    // Left motor direction B
-#define ENB 32    // Right motor PWM
-#define IN3 25    // Right motor direction A
-#define IN4 33    // Right motor direction B
+**Motor Driver Data Connections**
 
+| ESP32 GPIO | L298N #1 (Left Motors) | ESP32 GPIO | L298N #2 (Right Motors) |
+| :---: | :--- | :---: | :--- |
+| `GPIO 14` (PWM) | `ENA` | `GPIO 32` (PWM) | `ENB` |
+| `GPIO 26` | `IN1` | `GPIO 25` | `IN3` |
+| `GPIO 27` | `IN2` | `GPIO 33` | `IN4` |
 
-If motors spin the wrong direction
-Swap the two wires on that motor at the L298N output terminals no code change needed.
+**Motor Wiring (4-Motor Parallel)**
+*   **L298N OUT1:** Front Motor (+) and Rear Motor (+)
+*   **L298N OUT2:** Front Motor (−) and Rear Motor (−)
 
+---
 
-Competition Tips
+## 💻 Software Features
 
-Test on the actual competition floor and re tune balance there
-Use Medium speed for precise ball control, switch to High when pushing opponents
-Set Turn to around 15–20% for the best balance of agility and control
-If the robot drifts left, press BAL  two clicks at a time until straight
-All 4 wheels must fully contact the floor, rock the robot to check for wobble
+*   🌐 **Browser-Based Gamepad:** Works instantly over WiFi.
+*   📱 **Responsive UI:** Full-screen landscape mode with orientation lock and portrait mode blocking.
+*   👆 **True Multi-Touch:** Press Forward + Left/Right simultaneously. Prevents button locks via pointer-id tracking map.
+*   🔄 **Smooth Arc Turns:** Inner wheels are slowed down rather than reversed for fluid turning. Includes diagonal arcs (FL, FR, BL, BR).
+*   ⚙️ **Live Tuning:** Adjust Turn Speed and Direction Balance on-the-fly directly from the UI.
+*   ⚡ **Low Latency:** ESP32 CPU set to 240MHz with WiFi power-save disabled for instantaneous response times.
 
+### 🕹️ Movement Commands
 
-Project Structure
+| Command | Action | Behavior Details |
+| :---: | :--- | :--- |
+| **F** | Forward | Both motors forward, full speed. |
+| **B** | Backward | Both motors backward, full speed. |
+| **L** | Left Turn | Both motors forward, left inner slowed *(smooth arc left)*. |
+| **R** | Right Turn | Both motors forward, right inner slowed *(smooth arc right)*. |
+| **FL/FR** | Diagonal Forward | Arc forward-left / Arc forward-right. |
+| **BL/BR** | Diagonal Backward | Arc backward-left / Arc backward-right. |
+| **S** | Stop | Full stop. |
 
+---
 
-esp32-soccer-robot/
-├── robot.ino          # Main Arduino sketch (ESP32 code + HTML controller)
-└── README.md          # This file
+## 🚀 Getting Started
 
-
-Built With
-
-[Arduino ESP32 Core](https://github.com/espressif/arduino-esp32) — Espressif v3.x
-ESP32 Web-server library (built-in)
-Vanilla HTML / CSS / JavaScript — no external dependencies
-Pointer Events API — for true multi-touch game pad support
-
-
+### 1. Arduino IDE Setup
+1. Open Arduino IDE and navigate to **File → Preferences**.
+2. Paste the following into *Additional Boards Manager URLs*:
+```text
+   [https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json](https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json)
