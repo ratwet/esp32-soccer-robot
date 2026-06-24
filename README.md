@@ -379,7 +379,9 @@ ESP32-WiFi-Soccer-Robot/
 │
 ├── code.ino
 ├── README.md
-└── LICENSE
+├── LICENSE
+└── assets
+     └──robot.png
 
 ```
 
