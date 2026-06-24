@@ -7,6 +7,9 @@
   <img src="https://img.shields.io/badge/WiFi-Controlled-success?style=for-the-badge">
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge">
 </p>
+<br/>
+<img src="assets/robot.png" width="520" alt="Robot Soccer" />
+</div>
 
 <p align="center">
   <strong>A high-performance ESP32-powered WiFi Soccer Robot with a browser-based controller, multi-touch support, smooth differential steering, and real-time tuning controls.</strong>
